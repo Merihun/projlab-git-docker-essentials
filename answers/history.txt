@@ -1,0 +1,6 @@
+# Step "Read the history": fill in each value after the = sign, from the practice repository's history.
+commits_on_main=
+first_author=
+currency_changed_by=
+readme_last_changed_by=
+cancelled_filter_removed_in=

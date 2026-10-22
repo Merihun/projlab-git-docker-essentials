@@ -1,0 +1,28 @@
+# A colleague's Compose file for the report and a database. `docker compose up` fails, or starts but never
+# works. Four things are wrong. Fix them in this file (step "Debug a broken Compose file").
+name: fernhill-report-broken
+
+services:
+  db:
+    image: postgres:16.15-bookworm
+    environment:
+      POSTGRES_USER: report
+      POSTGRES_PASWORD: report
+      POSTGRES_DB: report
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U report -d report -p 5433"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  report:
+    build:
+      context: ../..
+    command: ["python", "-m", "report", "data/sample_orders.csv", "out/summary.csv", "--postgres"]
+    environment:
+      DATABASE_URL: postgresql://report:report@db:5432/report
+    volumes:
+      - ../../data:/app/date:ro
+      - ../../out:/app/out
+    depends_on:
+      - db
